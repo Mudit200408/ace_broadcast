@@ -1,6 +1,6 @@
-import 'package:ace_broadcast/pages/user/profile_page.dart';
-import 'package:ace_broadcast/pages/admin/second.dart';
-import 'package:ace_broadcast/pages/user/home_page.dart';
+import 'package:ace_broadcast/pages/user/profile_page/profile_page.dart';
+import 'package:ace_broadcast/pages/user/find_teammates/find_teammates_page.dart';
+import 'package:ace_broadcast/pages/user/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -18,7 +18,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   final List<Widget> _children = [
     const HomePage(),
-    const SecondPage(),
+    const FindTeammatesPage(),
     const ProfilePage(),
   ];
 
