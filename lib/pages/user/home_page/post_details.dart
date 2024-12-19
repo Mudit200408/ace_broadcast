@@ -1,3 +1,4 @@
+import 'package:ace_broadcast/widgets/appbar.dart';
 import 'package:ace_broadcast/widgets/post_widget/post_reactions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,8 +7,10 @@ import 'package:iconsax/iconsax.dart';
 
 class PostDetailsPage extends StatefulWidget {
   final PostModel post;
+  final bool focusCommentField;
 
-  const PostDetailsPage({super.key, required this.post});
+  const PostDetailsPage(
+      {super.key, required this.post, this.focusCommentField = false});
 
   @override
   _PostDetailsPageState createState() => _PostDetailsPageState();
@@ -15,26 +18,33 @@ class PostDetailsPage extends StatefulWidget {
 
 class _PostDetailsPageState extends State<PostDetailsPage> {
   final TextEditingController _commentController = TextEditingController();
+  final FocusNode _commentFocusNode = FocusNode();
   bool _isTextFieldEmpty = true;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.focusCommentField) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(_commentFocusNode);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    _commentFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Text(
-            'Post Details',
-            style: GoogleFonts.lato(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          surfaceTintColor: Theme.of(context).colorScheme.surface,
-          elevation: 1,
-        ),
+        appBar: customAppBar(context, "Post Details"),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -66,6 +76,38 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                           ),
                         ),
                       ],
+                    ),
+                    const Spacer(),
+                    Visibility(
+                      visible: widget.post.applicablePost,
+                      child: SizedBox(
+                        width: 90,
+                        height: 35,
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isDarkMode
+                                ? Colors.grey.shade900
+                                : Theme.of(context).colorScheme.surface,
+                            side: isDarkMode
+                                ? BorderSide.none
+                                : BorderSide(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 1.8),
+                          ),
+                          child: Text(
+                            'Apply',
+                            style: GoogleFonts.lato(
+                              color: isDarkMode
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.primary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -108,11 +150,13 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 ),
                 const SizedBox(height: 10),
                 PostReactions(
-                    likesCount: widget.post.likesCount,
-                    commentsCount: widget.post.commentsCount,
-                    shareCount: widget.post.shareCount,
-                    onShare: () {},
-                    onComments: () {}),
+                  likesCount: widget.post.likesCount,
+                  commentsCount: widget.post.commentsCount,
+                  shareCount: widget.post.shareCount,
+                  onShare: () {},
+                  onComments: () {},
+                  isApplicable: false,
+                ),
                 const SizedBox(height: 10),
                 Divider(
                   color: Theme.of(context).colorScheme.surfaceDim,
@@ -200,6 +244,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
               Expanded(
                 child: TextField(
                   controller: _commentController,
+                  focusNode: _commentFocusNode,
                   decoration: InputDecoration(
                     hintText: 'Add a comment...',
                     hintStyle: TextStyle(color: Theme.of(context).hintColor),
@@ -219,7 +264,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                 ),
                 onPressed: () {
                   if (_isTextFieldEmpty) {
-                    // Navigate to emoji board
+                    // Todo: show emoji keyboard or something else
                   } else {
                     // Send the comment
                   }

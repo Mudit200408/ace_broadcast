@@ -136,6 +136,7 @@ class _FindTeamPostWidgetState extends State<FindTeamPostWidget> {
                     key: _applyButtonKey,
                     onPressed: widget.onApply,
                     style: ElevatedButton.styleFrom(
+                      elevation: 0,
                       backgroundColor: isDarkMode
                           ? Colors.grey.shade900
                           : Theme.of(context).colorScheme.surface,

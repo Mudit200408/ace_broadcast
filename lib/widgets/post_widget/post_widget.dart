@@ -73,8 +73,17 @@ class PostWidget extends StatelessWidget {
                 commentsCount: post.commentsCount,
                 shareCount: post.shareCount,
                 onShare: _sharePost,
+                isApplicable: post.applicablePost,
                 onComments: () {
-                  // Todo
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostDetailsPage(
+                        post: post,
+                        focusCommentField: true,
+                      ),
+                    ),
+                  );
                 },
               ),
             ),

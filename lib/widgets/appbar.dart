@@ -8,6 +8,7 @@ AppBar customAppBar(BuildContext context, String title,
     backgroundColor: Theme.of(context).colorScheme.surface,
     surfaceTintColor: Theme.of(context).colorScheme.surface,
     elevation: 0,
+    automaticallyImplyLeading: false,
     title: Padding(
       padding: const EdgeInsets.only(left: 10, top: 15),
       child: Text(
