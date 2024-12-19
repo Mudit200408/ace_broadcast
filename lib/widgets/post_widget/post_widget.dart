@@ -1,6 +1,6 @@
 import 'package:ace_broadcast/model/post_model.dart';
 import 'package:ace_broadcast/pages/user/home_page/post_details.dart';
-import 'package:ace_broadcast/widgets/post_content.dart';
+import 'package:ace_broadcast/widgets/post_widget/post_content.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'post_header.dart';

@@ -1,9 +1,10 @@
 import 'package:ace_broadcast/model/post_model.dart';
+import 'package:ace_broadcast/utils/constant.dart';
+import 'package:ace_broadcast/widgets/appbar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:ace_broadcast/widgets/post_widget.dart';
+import 'package:ace_broadcast/widgets/post_widget/post_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -73,37 +74,11 @@ class _HomePageState extends State<HomePage> {
     },
   ];
 
-  final List<String> carouselImages = [
-    'https://wallpapers.com/images/hd/red-dead-redemtion-2-r5mi7mbyfkue3o22.jpg',
-    'https://pbs.twimg.com/media/Fb7Db4pWYAAUdFt.jpg',
-  ];
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          surfaceTintColor: Theme.of(context).colorScheme.surface,
-          elevation: 0,
-          title: Text(
-            'ACE Broadcast',
-            style: GoogleFonts.lato(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          centerTitle: false,
-          actions: [
-            IconButton(
-              icon: Icon(
-                Iconsax.calendar,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
+        appBar: customAppBar(context, 'ACE Broadcast', showCalendarIcon: true),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -116,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                 autoPlay: true,
                 enlargeCenterPage: true,
                 autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                autoPlayInterval: const Duration(seconds: 20),
+                autoPlayInterval: const Duration(seconds: 10),
               ),
               items: carouselImages.map((image) {
                 return Builder(
@@ -147,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                 height: 10,
                 indent: 5,
                 endIndent: 5,
-              ), 
+              ),
               itemCount: posts.length,
               itemBuilder: (context, index) {
                 final postData = posts[index];

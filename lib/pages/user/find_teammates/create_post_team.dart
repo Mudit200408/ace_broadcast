@@ -14,6 +14,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   int _charCount = 0;
 
   Category selectedCategory = Category(
+    index: 0,
     name: 'Select an option',
     icon: Icons.add,
     color: Colors.grey,
@@ -91,111 +92,114 @@ class _CreatePostPageState extends State<CreatePostPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(
-                        'https://avatarfiles.alphacoders.com/375/thumb-1920-375791.jpeg'),
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: categories.map((category) {
-                                return ListTile(
-                                  leading: Icon(category.icon,
-                                      color: category.color),
-                                  title: Text(category.name),
-                                  onTap: () {
-                                    setState(() {
-                                      selectedCategory = category;
-                                    });
-                                    Navigator.pop(context);
-                                    _validateInput();
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 4),
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(color: selectedCategory.color, width: 2),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            selectedCategory.icon,
-                            color: selectedCategory.color,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 5),
-                          Text(
-                            selectedCategory.name,
-                            style: GoogleFonts.lato(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CircleAvatar(
+                      radius: 25,
+                      backgroundImage: NetworkImage(
+                          'https://avatarfiles.alphacoders.com/375/thumb-1920-375791.jpeg'),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: categories.map((category) {
+                                  return ListTile(
+                                    leading: Icon(category.icon,
+                                        color: category.color),
+                                    title: Text(category.name),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedCategory = category;
+                                      });
+                                      Navigator.pop(context);
+                                      _validateInput();
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 4),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: selectedCategory.color, width: 2),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              selectedCategory.icon,
                               color: selectedCategory.color,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              size: 18,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 5),
+                            Text(
+                              selectedCategory.name,
+                              style: GoogleFonts.lato(
+                                color: selectedCategory.color,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, right: 10),
-                    child: Text(
-                      _charCount > 250 ? "$_charCount/280" : "",
-                      style: GoogleFonts.lato(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, right: 10),
+                      child: Text(
+                        _charCount > 250 ? "$_charCount/280" : "",
+                        style: GoogleFonts.lato(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 65),
-                child: TextField(
-                  controller: _postController,
-                  maxLength: 280,
-                  maxLines: 18,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    hintText: 'What’s on your mind?',
-                    hintStyle: GoogleFonts.lato(
-                      color: Colors.grey.shade500,
-                      fontSize: 18,
-                    ),
-                    border: InputBorder.none,
-                    counterText: '',
-                    isDense: true,
-                  ),
-                  style: GoogleFonts.lato(fontSize: 18),
+                  ],
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 65),
+                  child: TextField(
+                    controller: _postController,
+                    maxLength: 280,
+                    maxLines: 18,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      hintText: 'Describe your team needs…',
+                      hintStyle: GoogleFonts.lato(
+                        color: Colors.grey.shade500,
+                        fontSize: 18,
+                      ),
+                      border: InputBorder.none,
+                      counterText: '',
+                      isDense: true,
+                    ),
+                    style: GoogleFonts.lato(fontSize: 18),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

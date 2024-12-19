@@ -1,4 +1,4 @@
-import 'package:ace_broadcast/widgets/post_reactions.dart';
+import 'package:ace_broadcast/widgets/post_widget/post_reactions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ace_broadcast/model/post_model.dart';
