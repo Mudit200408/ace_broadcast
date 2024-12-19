@@ -31,7 +31,7 @@ class PostReactions extends StatelessWidget {
           likeCount: likesCount,
           likeBuilder: (bool isLiked) {
             return Icon(
-              isLiked ? Icons.favorite : Iconsax.heart,
+              isLiked ? Iconsax.heart5 : Iconsax.heart,
               color: isLiked ? Colors.red : Theme.of(context).iconTheme.color,
               size: 20,
             );

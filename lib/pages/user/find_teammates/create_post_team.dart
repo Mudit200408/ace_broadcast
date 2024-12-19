@@ -1,6 +1,7 @@
 import 'package:ace_broadcast/model/event_category.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class CreatePostPage extends StatefulWidget {
 class _CreatePostPageState extends State<CreatePostPage> {
   final TextEditingController _postController = TextEditingController();
   int _charCount = 0;
+  DateTime? _selectedDate;
 
   Category selectedCategory = Category(
     index: 0,
@@ -36,7 +38,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
   void _validateInput() {
     setState(() {
       isButtonEnabled = _postController.text.trim().isNotEmpty &&
-          selectedCategory.name != 'Select an option';
+          selectedCategory.name != 'Select an option' &&
+          _selectedDate != null;
     });
   }
 
@@ -109,60 +112,70 @@ class _CreatePostPageState extends State<CreatePostPage> {
                           'https://avatarfiles.alphacoders.com/375/thumb-1920-375791.jpeg'),
                     ),
                     const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: categories.map((category) {
-                                  return ListTile(
-                                    leading: Icon(category.icon,
-                                        color: category.color),
-                                    title: Text(category.name),
-                                    onTap: () {
-                                      setState(() {
-                                        selectedCategory = category;
-                                      });
-                                      Navigator.pop(context);
-                                      _validateInput();
-                                    },
-                                  );
-                                }).toList(),
-                              ),
-                            );
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            categorySelectBottomBar(context);
                           },
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 4),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: selectedCategory.color, width: 2),
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              selectedCategory.icon,
-                              color: selectedCategory.color,
-                              size: 18,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 4),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: selectedCategory.color, width: 2),
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                            const SizedBox(width: 5),
-                            Text(
-                              selectedCategory.name,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  selectedCategory.icon,
+                                  color: selectedCategory.color,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  selectedCategory.name,
+                                  style: GoogleFonts.lato(
+                                    color: selectedCategory.color,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: GestureDetector(
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate:
+                                    DateTime.now().add(Duration(days: 60)),
+                              );
+                              if (pickedDate != null) {
+                                setState(() {
+                                  _selectedDate = pickedDate;
+                                });
+                              }
+                            },
+                            child: Text(
+                              _selectedDate != null
+                                  ? DateFormat('dd MMM').format(_selectedDate!)
+                                  : 'Select Last Date',
                               style: GoogleFonts.lato(
-                                color: selectedCategory.color,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
+                                  color:
+                                      Theme.of(context).colorScheme.surfaceDim,
+                                  fontSize: 16),
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        )
+                      ],
                     ),
                     const Spacer(),
                     Padding(
@@ -172,14 +185,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         style: GoogleFonts.lato(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 15,
                         ),
                       ),
                     ),
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 65),
+                  padding: const EdgeInsets.only(left: 65, top: 10),
                   child: TextField(
                     controller: _postController,
                     maxLength: 280,
@@ -203,6 +216,32 @@ class _CreatePostPageState extends State<CreatePostPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<dynamic> categorySelectBottomBar(BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: categories.map((category) {
+              return ListTile(
+                leading: Icon(category.icon, color: category.color),
+                title: Text(category.name),
+                onTap: () {
+                  setState(() {
+                    selectedCategory = category;
+                  });
+                  Navigator.pop(context);
+                  _validateInput();
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
     );
   }
 }
